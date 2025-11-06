@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>岗位详情 - IT岗位求职记录系统</title>
+    <style>
+        .detail-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .detail-label {
+            font-weight: bold;
+            color: #495057;
+            width: 120px;
+            display: inline-block;
+        }
+        .detail-value {
+            color: #212529;
+        }
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .status-badge.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-badge.warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-badge.danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-badge.secondary {
+            background-color: #e2e3e5;
+            color: #495057;
+        }
+        .action-buttons {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h2 class="mb-0">岗位详情</h2>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <h3 th:text="${job.jobName}" class="text-primary"></h3>
+                        <h4 th:text="${job.companyName}" class="text-secondary"></h4>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <span th:class="|status-badge ${job.status == '已录用' ? 'success' : job.status == '面试中' ? 'warning' : job.status == '已拒绝' ? 'danger' : 'secondary'}"
+                              th:text="${job.status}"></span>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">薪资：</span>
+                    <span class="detail-value" th:text="${job.salary ?: '未填写'}"></span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">工作地点：</span>
+                    <span class="detail-value" th:text="${job.location ?: '未填写'}"></span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">工作经验：</span>
+                    <span class="detail-value" th:text="${job.experience ?: '未填写'}"></span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">学历要求：</span>
+                    <span class="detail-value" th:text="${job.education ?: '未填写'}"></span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">招聘来源：</span>
+                    <span class="detail-value" th:text="${job.source ?: '未填写'}"></span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">联系方式：</span>
+                    <span class="detail-value" th:text="${job.contactInfo ?: '未填写'}"></span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">创建时间：</span>
+                    <span class="detail-value" th:text="${#dates.format(job.createTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">更新时间：</span>
+                    <span class="detail-value" th:text="${#dates.format(job.updateTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">岗位要求：</div>
+                    <div class="detail-value mt-2" th:text="${job.requirements ?: '未填写'}" style="white-space: pre-wrap;"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">岗位描述：</div>
+                    <div class="detail-value mt-2" th:text="${job.description ?: '未填写'}" style="white-space: pre-wrap;"></div>
+                </div>
+
+                <div class="action-buttons text-center">
+                    <a th:href="@{/edit/{id}(id=${job.id})}" class="btn btn-warning btn-lg mr-3">
+                        <i class="fa fa-edit"></i> 编辑
+                    </a>
+                    <a th:href="@{/delete/{id}(id=${job.id})}" class="btn btn-danger btn-lg mr-3" 
+                       onclick="return confirm('确定要删除这个岗位吗？')">
+                        <i class="fa fa-trash"></i> 删除
+                    </a>
+                    <a href="/" class="btn btn-secondary btn-lg">
+                        <i class="fa fa-arrow-left"></i> 返回列表
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

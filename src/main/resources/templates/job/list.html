@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>岗位列表 - IT岗位求职记录系统</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">岗位列表</h2>
+            </div>
+            <div class="card-body">
+                <!-- 添加岗位按钮 -->
+                <div class="mb-4">
+                    <a th:href="@{/add}" class="btn btn-primary">
+                        <i class="fa fa-plus"></i> 添加新岗位
+                    </a>
+                </div>
+
+                <!-- 搜索和筛选表单 -->
+                <div class="bg-light p-4 rounded mb-4">
+                    <form th:action="@{/}" method="get" class="form-inline">
+                        <div class="form-group mr-3 mb-2">
+                            <label for="companyName" class="mr-2">企业名称:</label>
+                            <input type="text" id="companyName" name="companyName" class="form-control" 
+                                   placeholder="输入企业名称搜索">
+                        </div>
+                        <div class="form-group mr-3 mb-2">
+                            <label for="jobName" class="mr-2">岗位名称:</label>
+                            <input type="text" id="jobName" name="jobName" class="form-control" 
+                                   placeholder="输入岗位名称搜索">
+                        </div>
+                        <div class="form-group mr-3 mb-2">
+                            <label for="status" class="mr-2">状态:</label>
+                            <select id="status" name="status" class="form-control">
+                                <option value="">全部</option>
+                                <option value="未申请">未申请</option>
+                                <option value="已申请">已申请</option>
+                                <option value="面试中">面试中</option>
+                                <option value="已录用">已录用</option>
+                                <option value="已拒绝">已拒绝</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">搜索</button>
+                    </form>
+                </div>
+
+                <!-- 岗位列表 -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>序号</th>
+                                <th>企业名称</th>
+                                <th>岗位名称</th>
+                                <th>薪资</th>
+                                <th>地点</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="job, stat : ${jobs}">
+                                <td th:text="${stat.count}"></td>
+                                <td th:text="${job.companyName}"></td>
+                                <td th:text="${job.jobName}"></td>
+                                <td th:text="${job.salary}"></td>
+                                <td th:text="${job.location}"></td>
+                                <td>
+                                    <span th:class="|badge ${job.status == '已录用' ? 'badge-success' : job.status == '面试中' ? 'badge-warning' : job.status == '已拒绝' ? 'badge-danger' : 'badge-secondary'}"
+                                          th:text="${job.status}"></span>
+                                </td>
+                                <td th:text="${#dates.format(job.createTime, 'yyyy-MM-dd HH:mm')}"></td>
+                                <td>
+                                    <a th:href="@{/detail/{id}(id=${job.id})}" class="btn btn-sm btn-info mr-1">详情</a>
+                                    <a th:href="@{/edit/{id}(id=${job.id})}" class="btn btn-sm btn-warning mr-1">编辑</a>
+                                    <a th:href="@{/delete/{id}(id=${job.id})}" class="btn btn-sm btn-danger" 
+                                       onclick="return confirm('确定要删除这个岗位吗？')">删除</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 无数据提示 -->
+                <div th:if="${jobs.empty}" class="text-center text-muted py-5">
+                    <p>暂无岗位数据，请添加新岗位</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
