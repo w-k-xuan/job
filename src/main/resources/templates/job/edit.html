@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑岗位 - IT岗位求职记录系统</title>
+    <style>
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-control:focus {
+            border-color: #ffc107;
+            box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h2 class="mb-0">编辑岗位信息</h2>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/edit/{id}(id=${job.id})}" method="post" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="companyName" class="font-weight-bold">企业名称 <span class="text-danger">*</span></label>
+                                <input type="text" id="companyName" name="companyName" class="form-control" 
+                                       th:value="${job.companyName}" placeholder="请输入企业名称" required>
+                                <div class="invalid-feedback">请输入企业名称</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="jobName" class="font-weight-bold">岗位名称 <span class="text-danger">*</span></label>
+                                <input type="text" id="jobName" name="jobName" class="form-control" 
+                                       th:value="${job.jobName}" placeholder="请输入岗位名称" required>
+                                <div class="invalid-feedback">请输入岗位名称</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="salary">薪资</label>
+                                <input type="text" id="salary" name="salary" class="form-control" 
+                                       th:value="${job.salary}" placeholder="如：15k-25k">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="location">工作地点</label>
+                                <input type="text" id="location" name="location" class="form-control" 
+                                       th:value="${job.location}" placeholder="如：北京、上海">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="status">申请状态</label>
+                                <select id="status" name="status" class="form-control" th:value="${job.status}">
+                                    <option value="未申请" th:selected="${job.status == '未申请'}">未申请</option>
+                                    <option value="已申请" th:selected="${job.status == '已申请'}">已申请</option>
+                                    <option value="面试中" th:selected="${job.status == '面试中'}">面试中</option>
+                                    <option value="已录用" th:selected="${job.status == '已录用'}">已录用</option>
+                                    <option value="已拒绝" th:selected="${job.status == '已拒绝'}">已拒绝</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="experience">工作经验</label>
+                                <input type="text" id="experience" name="experience" class="form-control" 
+                                       th:value="${job.experience}" placeholder="如：3-5年">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="education">学历要求</label>
+                                <input type="text" id="education" name="education" class="form-control" 
+                                       th:value="${job.education}" placeholder="如：本科及以上">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="source">招聘来源</label>
+                                <input type="text" id="source" name="source" class="form-control" 
+                                       th:value="${job.source}" placeholder="如：拉勾网、BOSS直聘">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="contactInfo">联系方式</label>
+                                <input type="text" id="contactInfo" name="contactInfo" class="form-control" 
+                                       th:value="${job.contactInfo}" placeholder="如：hr@company.com">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="requirements" class="font-weight-bold">岗位要求</label>
+                        <textarea id="requirements" name="requirements" class="form-control" rows="4" 
+                                  placeholder="请输入岗位的具体要求" th:text="${job.requirements}"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">岗位描述</label>
+                        <textarea id="description" name="description" class="form-control" rows="4" 
+                                  placeholder="请输入岗位的详细描述" th:text="${job.description}"></textarea>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-warning btn-lg mr-3">更新</button>
+                        <a href="/" class="btn btn-secondary btn-lg">返回</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 表单验证
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+</body>
+</html>
